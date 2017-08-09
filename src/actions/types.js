@@ -1,0 +1,1 @@
+export const GET_ALL_BEJEWELED = "get_all_bejeweled";
