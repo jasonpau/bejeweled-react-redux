@@ -24,7 +24,8 @@ export default function(state = default_state,action){
         case  GET_FIRST_TILE:
             return {...state, preventClick: default_state.preventClick += action.payload.incr, first: action.payload.first};
         case GET_SECOND_TILE:
-            return {...state, preventClick: default_state.preventClick += action.payload.incr, second: action.payload.second};
+            console.log('second action',action.payload);
+            return {...state, preventClick: default_state.preventClick += action.payload.incr, second: action.payload.second, gameBoard:action.payload.gameBoard };
        default:
             return default_state;
     }

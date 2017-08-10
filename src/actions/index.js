@@ -48,7 +48,8 @@ export function firstTIleAction(arr){
 export function secondTileAction(obj){
     return{
         type:GET_SECOND_TILE,
-        payload: {incr: 1, second: obj}
+        payload: {incr: 1, second: obj.second, gameBoard: obj.gameArr}
+        // payload: {incr: 1, second: obj}
     }
 }
 

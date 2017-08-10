@@ -17,7 +17,7 @@ export default function GameRow(props) {
           const rowIndex = props.position;
           const colIndex = index;
           //click on a square, it highlights, counter should go up one...logic should run on second click
-          props.onC(rowIndex,colIndex);
+          props.onC(rowIndex,colIndex,cell.color);
           console.log('row',rowIndex);
           console.log('col',colIndex);
         }
