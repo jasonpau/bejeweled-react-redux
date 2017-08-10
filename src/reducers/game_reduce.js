@@ -1,4 +1,4 @@
-import {GET_GAME_START} from '../actions/index';
+import {GET_GAME_START} from '../actions/types';
 
 const default_state={
     start: false,
