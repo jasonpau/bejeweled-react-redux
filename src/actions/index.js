@@ -1,4 +1,4 @@
-import { GET_GAME_START } from './types';
+import { GET_GAME_START, GET_ALL_BEJEWELED } from './types';
 
 
 /**
@@ -10,6 +10,17 @@ export function activateGame (){
     return{
         type: GET_GAME_START,
         payload: true,
+    }
+}
+/**
+ * @param {Array} arr - receives an array to set the size of the board
+ * @description receives an array that will be passed to state to set board size
+ *
+ * **/
+export function createGameBoard (arr){
+    return {
+        type: GET_ALL_BEJEWELED,
+        payload: {gameData: arr}
     }
 }
 //
