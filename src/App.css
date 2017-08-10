@@ -1,4 +1,5 @@
 body {
+  padding: 0;
   margin: 0;
   background: url(images/background.jpg) no-repeat center;
   background-size: cover;
@@ -9,8 +10,12 @@ body {
 }
 
 @keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .game-board {
@@ -19,23 +24,29 @@ body {
   font-size: 0;
   margin: 0 auto;
   border: 5px solid lightyellow;
-  box-shadow: 0 2px 15px rgba(0,0,0,0.4),
-  inset 0 2px 15px rgba(0,0,0,0.4);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.4),
+  inset 0 2px 15px rgba(0, 0, 0, 0.4);
 }
 
 .game-row {
-  background-color: rgba(0,0,0,0.7);
+  background-color: rgba(0, 0, 0, 0.7);
   width: 100%;
   height: 12.5%;
 }
 
+.game-row-cell:hover {
+  background-color: rgba(255, 255, 255, 0.17);
+  transition: all 0.2s ease;
+}
+
 .game-row:nth-child(odd) .game-row-cell:nth-child(odd) {
-  background-color: rgba(0,0,0,0.15);
+  background-color: rgba(0, 0, 0, 0.15);
 }
 
 .game-row:nth-child(even) .game-row-cell:nth-child(even) {
-  background-color: rgba(0,0,0,0.15);
+  background-color: rgba(0, 0, 0, 0.15);
 }
+
 .game-row:nth-child(odd) .game-row-cell:nth-child(odd):hover {
   background-color: rgba(255, 255, 255, 0.17);
   transition: all 0.2s ease;
@@ -51,9 +62,47 @@ body {
   height: 100%;
   display: inline-block;
   font-size: 1rem;
+  transition: all 1s ease;
 }
 
-/*.color-0 {*/
-  /*border-radius: 50%;*/
-  /*background-color: white;*/
-/*}*/
+.gem {
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  opacity: 0.9;
+  margin: 10%;
+}
+
+.gem:hover {
+  opacity: 1;
+}
+
+.color-0 {
+  background-color: white;
+}
+
+.color-1 {
+  background-color: yellow;
+}
+
+.color-2 {
+  background-color: orangered;
+}
+
+.color-3 {
+  background-color: darkred;
+}
+
+.color-4 {
+  background-color: magenta;
+}
+
+.color-5 {
+  background-color: blue;
+}
+
+.color-6 {
+  background-color: green;
+}
+
+
