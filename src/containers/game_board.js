@@ -11,18 +11,45 @@ function cl(string, variable) {
 
 class GameBoard extends Component {
 
+  generateRandomColorNumber(range, excluded1, excluded2){
+    if (excluded1 !== null) range--;
+    if (excluded2 !== null) range--;
 
-  generateRandomColorNumber(num){
-    return Math.floor(Math.random() * num);
+    let n = Math.floor(Math.random() * (range));
+    if (excluded1 !== null && n >= excluded1) n++;
+    if (excluded2 !== null && n >= excluded2) n++;
+    cl('random number generated: ' + n);
+    return n;
   }
 
   generateGameArray(rows, cells, numberOfColors) {
     const array = [];
-    for (let i = 0; i < rows; i++) {
+    for (let r = 0; r < rows; r++) {
       array.push([]);
-      for (let j = 0; j < cells; j++) {
-        array[i].push({
-          color: this.generateRandomColorNumber(numberOfColors),
+      for (let c = 0; c < cells; c++) {
+
+        let exclude1 = null;
+        let exclude2 = null;
+
+        // figure out if two of the same color exist vertically right before our current cell, if so, note the color (number)
+        if (r >= 2) { // we don't want to check if we'd be going off the board vertically
+          if (array[r-1][c].color === array[r-2][c].color) {
+            exclude1 = array[r-1][c].color;
+          }
+        }
+
+        //figure out if two of the same color exist horizontally right before our current cell, if so, note the color (number)
+        if (c >= 2) { // we don't want to check if we'd be going off the board horizontally
+          if (array[r][c - 1].color === array[r][c - 2].color) {
+            exclude2 = array[r][c - 1].color;
+          }
+        }
+
+        // pass those "exclude" colors into our random number generator
+        let color = this.generateRandomColorNumber(numberOfColors, exclude1, exclude2);
+
+        array[r].push({
+          color: color,
           clicked: false
         });
       }
