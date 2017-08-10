@@ -1,7 +1,4 @@
-import {
-    GET_ALL_BEJEWELD,
-    GET_GAME_START,
-} from './types';
+import { GET_GAME_START } from './types';
 
 
 /**
@@ -11,8 +8,13 @@ import {
  * */
 export function activateGame (){
     return{
-        type:GET_GAME_START,
+        type: GET_GAME_START,
         payload: true,
     }
 }
-
+//
+// export function asdf() {
+//   return{
+//     type: GET_ALL_BEJEWELED
+//   }
+// }
