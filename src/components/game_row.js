@@ -17,14 +17,14 @@ export default function GameRow(props) {
           const rowIndex = props.position;
           const colIndex = index;
           //click on a square, it highlights, counter should go up one...logic should run on second click
-          props.onClick();
+          props.onC();
           console.log('row',rowIndex);
           console.log('col',colIndex);
         }
       }
       console.log(cell, index);
       return (
-          <div key={index} className={'game-row-cell color-' + cell.color} onClick={(e)=>handleClick(e)}>
+          <div key={index} className={'game-row-cell color-' + cell.color} onClick={handleClick}>
           </div>
       )
     });

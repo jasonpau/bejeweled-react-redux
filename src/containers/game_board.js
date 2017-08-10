@@ -35,7 +35,8 @@ class GameBoard extends Component {
     this.props.createGameBoard(this.generateGameArray(8, 8, 7));
 
   }
-  handleClicks(){
+  handleClick(){
+    console.log('kid did it');
      this.props.tileClickAction();
   }
   handleLogic(row,col){
@@ -51,7 +52,7 @@ class GameBoard extends Component {
     if (this.props.gameArray) {
       rows = this.props.gameArray.map((row, index) => {
         return (
-          <GameRow key={index} row={row} position={index} clickable={this.props.preventClick} onClick={()=>this.handleClicks.bind(this)()} />
+          <GameRow key={index} row={row} position={index} clickable={this.props.preventClick} onC={()=>this.handleClick.bind(this)()} />
         );
       });
     }
@@ -82,4 +83,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { activateGame, createGameBoard })(GameBoard);
+export default connect(mapStateToProps, { activateGame, createGameBoard, tileClickAction })(GameBoard);

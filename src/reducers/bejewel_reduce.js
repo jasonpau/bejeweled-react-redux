@@ -16,7 +16,7 @@ export default function(state = default_state,action){
             return {...state, gameBoard: action.payload.gameData};
         case GET_TILE_ACTION:
             console.log('action pay');
-            return {...state, preventClick: action.payload.incr};
+            return {...state, preventClick: default_state.preventClick += action.payload.incr};
        default:
             return default_state;
     }

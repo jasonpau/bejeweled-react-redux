@@ -32,8 +32,7 @@ export function tileClickAction (){
     console.log('tile action creation');
     return{
         type: GET_TILE_ACTION,
-        payload: {incr: 1},
-
+        payload: {incr: 1}
     }
 }
 
