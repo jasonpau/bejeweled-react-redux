@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import { activateGame, createGameBoard } from '../actions/index';
+import GameRow from '../components/game_row';
 
+// console.log shortcut
 function cl(string, variable) {
   console.log(string + ':');
   if (variable) console.log(variable);
 }
 
 class GameBoard extends Component {
-
 
   generateGameArray(rows, cells) {
     const array = [];
@@ -28,16 +29,18 @@ class GameBoard extends Component {
     this.props.createGameBoard(this.generateGameArray(8,8));
   }
 
-
   render() {
-
     cl('inside render game array', this.props.gameArray);
 
-    const rows = (
-      <div>
-        Hey the game is active! Yeah buddy! Now we're cookin' with diesel!
-      </div>
-    );
+    let rows = [];
+
+    if (this.props.gameArray) {
+      rows = this.props.gameArray.map((row, index) => {
+        return (
+          <GameRow key={index} row={row} />
+        );
+      });
+    }
 
     const button = (
       <button onClick={this.startGameHandler.bind(this)}>
