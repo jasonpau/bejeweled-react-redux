@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 
 //function receives props telling it to make X objects per array
 export default function GameRow(props) {
-    //const num = props;
   console.log('props',props);
 
     const cells = props.row.map((cell, index) => {

@@ -11,13 +11,19 @@ function cl(string, variable) {
 
 class GameBoard extends Component {
 
-  generateGameArray(rows, cells) {
+
+  generateRandomColorNumber(num){
+    return Math.floor(Math.random() * num);
+  }
+
+  generateGameArray(rows, cells, numberOfColors) {
     const array = [];
     for (let i = 0; i < rows; i++) {
       array.push([]);
       for (let j = 0; j < cells; j++) {
         array[i].push({
-          color: null
+          color: this.generateRandomColorNumber(numberOfColors),
+          clicked: false
         });
       }
     }
@@ -26,7 +32,7 @@ class GameBoard extends Component {
 
   startGameHandler() {
     this.props.activateGame();
-    this.props.createGameBoard(this.generateGameArray(8,8));
+    this.props.createGameBoard(this.generateGameArray(8, 8, 7));
   }
 
   render() {
