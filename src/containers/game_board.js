@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { activateGame, createGameBoard, tileClickAction } from '../actions/index';
+import { activateGame, createGameBoard, tileClickAction, firstTIleAction, secondTileAction } from '../actions/index';
 import GameRow from '../components/game_row';
 
 // console.log shortcut
@@ -62,9 +62,28 @@ class GameBoard extends Component {
     this.props.createGameBoard(this.generateGameArray(8, 8, 7));
 
   }
-  handleClick(){
-    console.log('kid did it');
-     this.props.tileClickAction();
+  handleClick(r,c){
+    console.log(r,c);
+    if(!Object.keys(this.props.first).length){
+      let first = {row: r, col: c};
+      this.props.firstTIleAction([first,{incr: 1}]);
+    }else{
+      let second = {row: r, col: c};
+      let withinFirstRow = this.props.first.row;
+      let withinFirstCol = this.props.first.col;
+      //if the row is not within 0 or 1, second click is now first click
+      if(withinFirstRow - r !== 0 && Math.abs(withinFirstRow - r) !== 1 ){
+        console.log('too large of a distance');
+        return this.props.firstTIleAction([second,{incr:0}]);
+      }else if(withinFirstCol - c !== 0 && Math.abs(withinFirstCol - c) !== 1){
+        console.log('too far apart on the same row');
+        return this.props.firstTIleAction([second,{incr:0}]);
+      }
+      this.props.secondTileAction(second);
+      //swap pieces
+      //send swapped coords to win condition method 2x
+    }
+    // this.props.tileClickAction();
   }
   handleLogic(row,col){
     console.log('handle logic',row);
@@ -79,7 +98,7 @@ class GameBoard extends Component {
     if (this.props.gameArray) {
       rows = this.props.gameArray.map((row, index) => {
         return (
-          <GameRow key={index} row={row} position={index} clickable={this.props.preventClick} onC={()=>this.handleClick.bind(this)()} />
+          <GameRow key={index} row={row} position={index} clickable={this.props.preventClick} onC={(r,c)=>this.handleClick.bind(this)(r,c)} />
         );
       });
     }
@@ -103,11 +122,12 @@ class GameBoard extends Component {
 
 function mapStateToProps(state) {
   return {
-    nums: state.bejeweled.nums,
+    first: state.bejeweled.first,
+    second: state.bejeweled.second,
     preventClick: state.bejeweled.preventClick,
     gameArray: state.bejeweled.gameBoard,
     active: state.gameStart.start
   };
 }
 
-export default connect(mapStateToProps, { activateGame, createGameBoard, tileClickAction })(GameBoard);
+export default connect(mapStateToProps, { activateGame, createGameBoard, tileClickAction, firstTIleAction, secondTileAction })(GameBoard);
