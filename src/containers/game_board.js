@@ -10,15 +10,100 @@ function cl(string, variable) {
 }
 
 class GameBoard extends Component {
+  constructor(){
+    super();
+
+    this.matchedCells = [];
+  }
+
+  checkForMatches(originRow, originCell) {
+    debugger;
+    const { gameArray } = this.props;
+
+    const originColor = gameArray[originRow][originCell].color;
+    cl('origin row', originRow);
+    cl('originCell', originCell);
+    cl('originColor', originColor);
+
+
+    // let verticalCount = 1;
+    // let horizontalCount = 1;
+
+    let possibleVerticalMatchCells = [[originRow,originCell]];
+    let possibleHorizontalMatchCells = [[originRow,originCell]];
+
+    let verticalMatchedCells = [];
+    let horizontalMatchedCells = [];
+
+    // vertical
+    for (let r = originRow; r >= 0; r--) {
+      if (r === originRow) continue;
+      if (gameArray[r][originCell].color === originColor) {
+        // verticalCount++;
+        possibleVerticalMatchCells.push([r,originCell]);
+      } else {
+        break;
+      }
+    }
+    for (let r = originRow; r <= gameArray.length; r++) {
+      if (r === originRow) continue;
+      if (gameArray[r][originCell].color === originColor) {
+        // verticalCount++;
+        possibleVerticalMatchCells.push([r,originCell]);
+      } else {
+        break;
+      }
+    }
+    if (possibleVerticalMatchCells.length >= 3) {
+      verticalMatchedCells = verticalMatchedCells.concat(possibleVerticalMatchCells);
+      cl('we have a vertical match!');
+    } else {
+      cl('no matches vertically...');
+    }
+
+    // horizontal
+    for (let c = originCell; c >= 0; c--) {
+      if (c === originCell) continue;
+      if (gameArray[originRow][c].color === originColor) {
+        //horizontalCount++;
+        possibleHorizontalMatchCells.push([originRow,c]);
+      } else {
+        break;
+      }
+    }
+    for (let c = originCell; c <= gameArray[originRow].length; c++) {
+      if (c === originCell) continue;
+      if (gameArray[originRow][c].color === originColor) {
+        //horizontalCount++;
+        possibleHorizontalMatchCells.push([originRow,c]);
+      } else {
+        break;
+      }
+    }
+    if (possibleHorizontalMatchCells.length >= 3) {
+      horizontalMatchedCells = horizontalMatchedCells.concat(possibleHorizontalMatchCells);
+      cl('we have a horizontal match!');
+    } else {
+      cl('no matches horizontally...');
+    }
+
+    // combine the vertical and horizontal arrays
+    const tempMatchedCells = verticalMatchedCells.concat(horizontalMatchedCells);
+    console.log('temp matched:', tempMatchedCells);
+
+    // remove duplicate cells if needed (e.g. duplicate origins)
+    this.matchedCells = tempMatchedCells.filter((element, index, self) => {
+      return index === self.indexOf(element);
+    });
+    console.log('this.matchedcells:',this.matchedCells);
+  }
 
   generateRandomColorNumber(range, excluded1, excluded2){
     if (excluded1 !== null) range--;
     if (excluded2 !== null) range--;
-
     let n = Math.floor(Math.random() * (range));
     if (excluded1 !== null && n >= excluded1) n++;
     if (excluded2 !== null && n >= excluded2) n++;
-    cl('random number generated: ' + n);
     return n;
   }
 
@@ -47,7 +132,7 @@ class GameBoard extends Component {
           }
         }
 
-        // pass those "exclude" colors into our random number generator
+        // pass the "exclude" colors into our random number generator if we have any (otherwise they're null)
         let color = this.generateRandomColorNumber(numberOfColors, exclude1, exclude2);
 
         array[r].push({
@@ -65,6 +150,7 @@ class GameBoard extends Component {
 
   }
   handleClick(){
+    debugger;
     console.log('kid did it');
      this.props.tileClickAction();
   }
