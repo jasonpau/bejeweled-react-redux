@@ -24,7 +24,7 @@ export default function GameRow(props) {
       }
       console.log(cell, index);
       return (
-          <div key={index} className={'game-row-cell color-' + cell.color} onClick={handleClick}>
+          <div key={index} className='game-row-cell' onClick={handleClick}>
             <div className={"gem color-" + cell.color} />
           </div>
       )
