@@ -1,6 +1,6 @@
 import {
     GET_ALL_BEJEWELED,
-    GET_TILE_ACTION
+    GET_TILE_ACTION,
 } from '../actions/types';
 
 const default_state={
@@ -9,11 +9,14 @@ const default_state={
 };
 
 export default function(state = default_state,action){
+    console.log('bejeweled reduce');
     switch(action.type){
         case GET_ALL_BEJEWELED:
-            return {...state, gameBoard:action.payload.gameData};
+            console.log('get all', action);
+            return {...state, gameBoard: action.payload.gameData};
         case GET_TILE_ACTION:
-            return {...state, preventClick: state.preventClick += action.payload.increment};
+            console.log('action pay');
+            return {...state, preventClick: default_state.preventClick += action.payload.incr};
        default:
             return default_state;
     }
