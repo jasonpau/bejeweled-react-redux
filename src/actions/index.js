@@ -1,4 +1,8 @@
-import { GET_GAME_START, GET_ALL_BEJEWELED } from './types';
+import {
+    GET_GAME_START,
+    GET_ALL_BEJEWELED,
+    GET_TILE_ACTION
+} from './types';
 
 
 /**
@@ -21,6 +25,13 @@ export function createGameBoard (arr){
     return {
         type: GET_ALL_BEJEWELED,
         payload: {gameData: arr}
+    }
+}
+
+export function tileClickAction(){
+    return{
+        type:GET_TILE_ACTION,
+        payload:{increment: 1}
     }
 }
 //

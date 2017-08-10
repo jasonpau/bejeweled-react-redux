@@ -37,7 +37,7 @@ class GameBoard extends Component {
     if (this.props.gameArray) {
       rows = this.props.gameArray.map((row, index) => {
         return (
-          <GameRow key={index} row={row} />
+          <GameRow key={index} row={row} position={index}  />
         );
       });
     }
