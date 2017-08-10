@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { activateGame, createGameBoard, tileClickAction } from '../actions/index';
+import { activateGame, createGameBoard, tileClickAction, firstTIleAction, secondTileAction } from '../actions/index';
 import GameRow from '../components/game_row';
 
 // console.log shortcut
@@ -149,14 +149,38 @@ class GameBoard extends Component {
     this.props.createGameBoard(this.generateGameArray(8, 8, 7));
 
   }
-  handleClick(){
-    debugger;
-    console.log('kid did it');
-     this.props.tileClickAction();
-  }
-  handleLogic(row,col){
-    console.log('handle logic',row);
-    console.log('handle logic',col);
+
+  handleClick(r,c,numbr){
+    console.log(r,c,numbr);
+    if(!Object.keys(this.props.first).length){
+      let first = {row: r, col: c};
+      this.colorOne= numbr;
+      this.props.firstTIleAction([first,{incr: 1}]);
+    }else{
+      let second = {row: r, col: c};
+      let withinFirstRow = this.props.first.row;
+      let withinFirstCol = this.props.first.col;
+      //if the row is not within 0 or 1, second click is now first click
+      if(withinFirstRow - r !== 0 && Math.abs(withinFirstRow - r) !== 1 ){
+        console.log('too large of a distance');
+        return this.props.firstTIleAction([second,{incr:0}]);
+        //if the cols are not within 0 or 1, then it's too far of a click to be second click
+      }else if(withinFirstCol - c !== 0 && Math.abs(withinFirstCol - c) !== 1){
+        console.log('too far apart on the same row');
+        return this.props.firstTIleAction([second,{incr:0}]);
+      }
+
+      let gameArr = this.props.gameArray;
+      console.log('game first click',gameArr[withinFirstRow][withinFirstCol]);
+      console.log('game second click',gameArr[r][c]);
+      let firstSwap = gameArr[withinFirstRow][withinFirstCol];
+      let secondSwap = gameArr[r][c];
+      // this.props.secondTileAction(second);
+      let doSwitch={second: second, gameArr:{firstSwap: firstSwap.color=numbr, secondSwap: secondSwap.color=this.colorOne}};
+      // this.props.secondTileAction(doSwitch); //need to make the gameBoard recognize elmeents 1 and 2 are modded
+      //send swapped coords to win condition method 2x
+    }
+    // this.props.tileClickAction();
   }
 
   render() {
@@ -167,7 +191,7 @@ class GameBoard extends Component {
     if (this.props.gameArray) {
       rows = this.props.gameArray.map((row, index) => {
         return (
-          <GameRow key={index} row={row} position={index} clickable={this.props.preventClick} onC={()=>this.handleClick.bind(this)()} />
+          <GameRow key={index} row={row} position={index} clickable={this.props.preventClick} onC={(r,c,n)=>this.handleClick.bind(this)(r,c,n)} />
         );
       });
     }
@@ -191,11 +215,12 @@ class GameBoard extends Component {
 
 function mapStateToProps(state) {
   return {
-    nums: state.bejeweled.nums,
+    first: state.bejeweled.first,
+    second: state.bejeweled.second,
     preventClick: state.bejeweled.preventClick,
     gameArray: state.bejeweled.gameBoard,
     active: state.gameStart.start
   };
 }
 
-export default connect(mapStateToProps, { activateGame, createGameBoard, tileClickAction })(GameBoard);
+export default connect(mapStateToProps, { activateGame, createGameBoard, tileClickAction, firstTIleAction, secondTileAction })(GameBoard);

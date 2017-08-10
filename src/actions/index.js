@@ -1,7 +1,9 @@
 import {
     GET_GAME_START,
     GET_ALL_BEJEWELED,
-    GET_TILE_ACTION
+    GET_TILE_ACTION,
+    GET_FIRST_TILE,
+    GET_SECOND_TILE,
 } from './types';
 
 
@@ -28,14 +30,28 @@ export function createGameBoard (arr){
     }
 }
 
-export function tileClickAction (){
+export function tileClickAction (obj){
     console.log('tile action creation');
     return{
         type: GET_TILE_ACTION,
-        payload: {incr: 1}
+        payload: {incr: 1, obj:obj}
     }
 }
 
+export function firstTIleAction(arr){
+    return{
+        type: GET_FIRST_TILE,
+        payload: {incr: arr[1].incr, first: arr[0]}
+    }
+}
+
+export function secondTileAction(obj){
+    return{
+        type:GET_SECOND_TILE,
+        payload: {incr: 1, second: obj.second, gameBoard: obj.gameArr}
+        // payload: {incr: 1, second: obj}
+    }
+}
 
 
 //

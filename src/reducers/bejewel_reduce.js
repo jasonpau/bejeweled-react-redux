@@ -1,11 +1,15 @@
 import {
     GET_ALL_BEJEWELED,
     GET_TILE_ACTION,
+    GET_FIRST_TILE,
+    GET_SECOND_TILE,
 } from '../actions/types';
 
 const default_state={
     gameBoard:undefined,
     preventClick: 0, //when this gets to 2, preventDefault on clicks
+    first: {},
+    second: {},
 };
 
 export default function(state = default_state,action){
@@ -17,6 +21,11 @@ export default function(state = default_state,action){
         case GET_TILE_ACTION:
             console.log('action pay');
             return {...state, preventClick: default_state.preventClick += action.payload.incr};
+        case  GET_FIRST_TILE:
+            return {...state, preventClick: default_state.preventClick += action.payload.incr, first: action.payload.first};
+        case GET_SECOND_TILE:
+            console.log('second action',action.payload);
+            return {...state, preventClick: default_state.preventClick += action.payload.incr, second: action.payload.second, gameBoard:action.payload.gameBoard };
        default:
             return default_state;
     }
