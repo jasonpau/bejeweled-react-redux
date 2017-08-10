@@ -31,14 +31,16 @@ class GameBoard extends Component {
         let exclude1 = null;
         let exclude2 = null;
 
-        // figure out if two of the same color exist vertically right before our current cell, if so, note the color (number)
+        // figure out if two of the same color exist vertically right before our current cell,
+        // if so, note the color (number) so we can exclude it when we generate this current cell's number
         if (r >= 2) { // we don't want to check if we'd be going off the board vertically
           if (array[r-1][c].color === array[r-2][c].color) {
             exclude1 = array[r-1][c].color;
           }
         }
 
-        //figure out if two of the same color exist horizontally right before our current cell, if so, note the color (number)
+        // figure out if two of the same color exist horizontally right before our current cell,
+        // if so, note the color (number) so we can exclude it when we generate this current cell's number
         if (c >= 2) { // we don't want to check if we'd be going off the board horizontally
           if (array[r][c - 1].color === array[r][c - 2].color) {
             exclude2 = array[r][c - 1].color;
