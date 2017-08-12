@@ -150,37 +150,42 @@ class GameBoard extends Component {
 
   }
 
-  handleClick(r,c,numbr){
-    console.log(r,c,numbr);
-    if(!Object.keys(this.props.first).length){
+  handleClick(r,c,cNum){
+    console.log(r,c,cNum);
+    if (!Object.keys(this.props.first).length) {
       let first = {row: r, col: c};
-      this.colorOne= numbr;
+      this.colorOne= cNum;
       this.props.firstTIleAction([first,{incr: 1}]);
-    }else{
+    } else {
       let second = {row: r, col: c};
       let withinFirstRow = this.props.first.row;
       let withinFirstCol = this.props.first.col;
       //if the row is not within 0 or 1, second click is now first click
-      if(withinFirstRow - r !== 0 && Math.abs(withinFirstRow - r) !== 1 ){
-        console.log('too large of a distance');
+      if (withinFirstRow - r !== 0 && Math.abs(withinFirstRow - r) !== 1 ) {
+        this.colorOne = cNum;
         return this.props.firstTIleAction([second,{incr:0}]);
         //if the cols are not within 0 or 1, then it's too far of a click to be second click
-      }else if(withinFirstCol - c !== 0 && Math.abs(withinFirstCol - c) !== 1){
-        console.log('too far apart on the same row');
+      } else if (withinFirstCol - c !== 0 && Math.abs(withinFirstCol - c) !== 1){
+        this.colorOne = cNum;
         return this.props.firstTIleAction([second,{incr:0}]);
       }
 
-      let gameArr = this.props.gameArray;
-      console.log('game first click',gameArr[withinFirstRow][withinFirstCol]);
-      console.log('game second click',gameArr[r][c]);
-      let firstSwap = gameArr[withinFirstRow][withinFirstCol];
-      let secondSwap = gameArr[r][c];
-      // this.props.secondTileAction(second);
-      let doSwitch={second: second, gameArr:{firstSwap: firstSwap.color=numbr, secondSwap: secondSwap.color=this.colorOne}};
-      // this.props.secondTileAction(doSwitch); //need to make the gameBoard recognize elmeents 1 and 2 are modded
-      //send swapped coords to win condition method 2x
+      //copy array you want to mutate indirectly
+      const mutateArr = this.props.gameArray.slice(); //we will send this to reducer
+      let firstSwap = mutateArr[withinFirstRow][withinFirstCol]; //the object we need to mutate as well
+      let secondSwap = mutateArr[r][c]; //the second object we need to mutate
+
+      let objSwapOne = Object.assign({}, firstSwap,{color: cNum, clicked: true}); //this may be needless at this point, but here we set the new value to obj
+      let objSwapTwo = Object.assign({}, secondSwap,{color: this.colorOne, clicked: true});//this enables color switch
+
+      let firstArr = mutateArr[withinFirstRow]; //set the obj in the array row to the new value
+      firstArr[withinFirstCol] = objSwapOne;
+      let secondArr = mutateArr[r];
+      secondArr[c] = objSwapTwo;
+      console.log('mut,',mutateArr);
+      const moveCompleted = { second: second, newGameArr: mutateArr };
+      this.props.secondTileAction(moveCompleted);
     }
-    // this.props.tileClickAction();
   }
 
   render() {
@@ -189,6 +194,7 @@ class GameBoard extends Component {
     let rows = [];
 
     if (this.props.gameArray) {
+      console.log('props gA',this.props.gameArray);
       rows = this.props.gameArray.map((row, index) => {
         return (
           <GameRow key={index} row={row} position={index} clickable={this.props.preventClick} onC={(r,c,n)=>this.handleClick.bind(this)(r,c,n)} />
