@@ -17,7 +17,7 @@ class GameBoard extends Component {
   }
 
   checkForMatches(originRow, originCell) {
-    debugger;
+    // debugger;
     const { gameArray } = this.props;
 
     const originColor = gameArray[originRow][originCell].color;
@@ -185,6 +185,8 @@ class GameBoard extends Component {
       console.log('mut,',mutateArr);
       const moveCompleted = { second: second, newGameArr: mutateArr };
       this.props.secondTileAction(moveCompleted);
+      this.checkForMatches(withinFirstRow,withinFirstCol);
+      this.checkForMatches(r,c);
     }
   }
 
