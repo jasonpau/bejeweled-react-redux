@@ -13,7 +13,6 @@ const default_state={
 };
 
 export default function(state = default_state,action){
-    console.log('bejeweled reduce');
     switch(action.type){
         case GET_ALL_BEJEWELED:
             console.log('get all', action);
@@ -25,7 +24,13 @@ export default function(state = default_state,action){
             return {...state, preventClick: default_state.preventClick += action.payload.incr, first: action.payload.first};
         case GET_SECOND_TILE:
             console.log('second action',action.payload);
-            return {...state, preventClick: default_state.preventClick += action.payload.incr, second: action.payload.second, gameBoard:action.payload.gameBoard };
+            console.log('state',state.gameBoard);
+            return {
+                ...state,
+                preventClick: default_state.preventClick += action.payload.incr,
+                second: action.payload.second,
+                gameBoard: action.payload.newGameArr,
+            };
        default:
             return default_state;
     }
