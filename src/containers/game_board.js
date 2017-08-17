@@ -196,7 +196,7 @@ class GameBoard extends Component {
     let rows = [];
 
     if (this.props.gameArray) {
-      console.log('props gA',this.props.gameArray);
+      console.log('props gA is true',this.props.gameArray);
       rows = this.props.gameArray.map((row, index) => {
         return (
           <GameRow key={index} row={row} position={index} clickable={this.props.preventClick} onC={(r,c,n)=>this.handleClick.bind(this)(r,c,n)} />
