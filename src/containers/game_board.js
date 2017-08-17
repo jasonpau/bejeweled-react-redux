@@ -4,7 +4,9 @@ import { activateGame, createGameBoard, tileClickAction, firstTIleAction, second
 import GameRow from '../components/game_row';
 
 // console.log shortcut
+let clOn = true;
 function cl(string, variable) {
+  if (clOn === false) return;
   console.log(string + ':');
   if (variable) console.log(variable);
 }
@@ -17,17 +19,12 @@ class GameBoard extends Component {
   }
 
   checkForMatches(originRow, originCell) {
-    // debugger;
     const { gameArray } = this.props;
 
     const originColor = gameArray[originRow][originCell].color;
     cl('origin row', originRow);
     cl('originCell', originCell);
     cl('originColor', originColor);
-
-
-    // let verticalCount = 1;
-    // let horizontalCount = 1;
 
     let possibleVerticalMatchCells = [[originRow,originCell]];
     let possibleHorizontalMatchCells = [[originRow,originCell]];
@@ -39,7 +36,6 @@ class GameBoard extends Component {
     for (let r = originRow; r >= 0; r--) {
       if (r === originRow) continue;
       if (gameArray[r][originCell].color === originColor) {
-        // verticalCount++;
         possibleVerticalMatchCells.push([r,originCell]);
       } else {
         break;
@@ -48,7 +44,6 @@ class GameBoard extends Component {
     for (let r = originRow; r <= gameArray.length; r++) {
       if (r === originRow) continue;
       if (gameArray[r][originCell].color === originColor) {
-        // verticalCount++;
         possibleVerticalMatchCells.push([r,originCell]);
       } else {
         break;
@@ -65,7 +60,6 @@ class GameBoard extends Component {
     for (let c = originCell; c >= 0; c--) {
       if (c === originCell) continue;
       if (gameArray[originRow][c].color === originColor) {
-        //horizontalCount++;
         possibleHorizontalMatchCells.push([originRow,c]);
       } else {
         break;
@@ -74,7 +68,6 @@ class GameBoard extends Component {
     for (let c = originCell; c <= gameArray[originRow].length; c++) {
       if (c === originCell) continue;
       if (gameArray[originRow][c].color === originColor) {
-        //horizontalCount++;
         possibleHorizontalMatchCells.push([originRow,c]);
       } else {
         break;
