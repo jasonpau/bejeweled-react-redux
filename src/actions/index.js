@@ -39,9 +39,10 @@ export function tileClickAction (obj){
 }
 
 export function firstTIleAction(arr){
+    console.log('first tile action',arr);
     return{
         type: GET_FIRST_TILE,
-        payload: {incr: arr[1].incr, first: arr[0]}
+        payload: {incr: arr[1].incr, first: arr[0], newGameArr: arr[2]}
     }
 }
 
