@@ -31,7 +31,6 @@ export function createGameBoard (arr){
 }
 
 export function tileClickAction (obj){
-    console.log('tile action creation');
     return{
         type: GET_TILE_ACTION,
         payload: {incr: 1, obj:obj}
@@ -41,7 +40,7 @@ export function tileClickAction (obj){
 export function firstTIleAction(arr){
     return{
         type: GET_FIRST_TILE,
-        payload: {incr: arr[1].incr, first: arr[0]}
+        payload: {incr: arr[1].incr, first: arr[0], newGameArr: arr[2]}
     }
 }
 

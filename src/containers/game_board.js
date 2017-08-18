@@ -146,10 +146,16 @@ class GameBoard extends Component {
 
   handleClick(r,c,cNum){
     console.log(r,c,cNum);
+    const mutateArr = this.props.gameArray.slice(); //we will send this to reducer
+
     if (!Object.keys(this.props.first).length) {
       let first = {row: r, col: c};
       this.colorOne= cNum;
-      this.props.firstTIleAction([first,{incr: 1}]);
+      let firstSwap = mutateArr[r][c]; //the object we need to mutate as well
+
+      let objClicked = Object.assign({}, firstSwap, {clicked: true});
+      mutateArr[r][c] = objClicked;
+      this.props.firstTIleAction([first,{incr: 1}, mutateArr]);
     } else {
       let second = {row: r, col: c};
       let withinFirstRow = this.props.first.row;
@@ -165,11 +171,10 @@ class GameBoard extends Component {
       }
 
       //copy array you want to mutate indirectly
-      const mutateArr = this.props.gameArray.slice(); //we will send this to reducer
       let firstSwap = mutateArr[withinFirstRow][withinFirstCol]; //the object we need to mutate as well
       let secondSwap = mutateArr[r][c]; //the second object we need to mutate
 
-      let objSwapOne = Object.assign({}, firstSwap,{color: cNum, clicked: true}); //this may be needless at this point, but here we set the new value to obj
+      let objSwapOne = Object.assign({}, firstSwap,{color: cNum}); //this may be needless at this point, but here we set the new value to obj
       let objSwapTwo = Object.assign({}, secondSwap,{color: this.colorOne, clicked: true});//this enables color switch
 
       let firstArr = mutateArr[withinFirstRow]; //set the obj in the array row to the new value
@@ -179,9 +184,27 @@ class GameBoard extends Component {
       console.log('mut,',mutateArr);
       const moveCompleted = { second: second, newGameArr: mutateArr };
       this.props.secondTileAction(moveCompleted);
+
       this.checkForMatches(withinFirstRow,withinFirstCol);
       this.checkForMatches(r,c);
+      this.swapColorsBack();
     }
+  }
+
+  swapColorsBack(){
+    console.log('matched cells',this.matchedCells);
+    const gameArr = this.props.gameArray.slice();
+    //there are no matches so we swap things back
+    let firstClickInd = this.props.first;
+    let fRow = firstClickInd.row;
+    let fCol = firstClickInd.col;
+
+    let secClickInd = this.props.second;
+    let sRow = secClickInd.row;
+    let sCol = secClickInd.col;
+
+    //send back an array to make as new state
+
   }
 
   render() {
