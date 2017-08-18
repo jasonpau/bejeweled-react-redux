@@ -21,7 +21,6 @@ export default function(state = default_state,action){
             console.log('action pay');
             return {...state, preventClick: default_state.preventClick += action.payload.incr};
         case  GET_FIRST_TILE:
-            console.log('get first tile',action);
             return {...state, preventClick: default_state.preventClick += action.payload.incr, first: action.payload.first, gameBoard: action.payload.newGameArr};
         case GET_SECOND_TILE:
             console.log('second action',action.payload);
