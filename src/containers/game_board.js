@@ -85,15 +85,37 @@ class GameBoard extends Component {
     const tempMatchedCells = verticalMatchedCells.concat(horizontalMatchedCells);
     console.log('temp matched:', tempMatchedCells);
 
-    // remove duplicate cells if needed (e.g. duplicate origins)
-    this.matchedCells = tempMatchedCells.filter((element, index, self) => {
+    // remove duplicate cells if needed (e.g. duplicate origins), and add the
+    this.matchedCells = this.removeDuplicateArrays(this.matchedCells.concat(this.removeDuplicateArrays(tempMatchedCells)));
+    console.log('this.matchedcells:',this.matchedCells);
+  }
+
+  // removed duplicate inner arrays from our main array, and return the new filtered array
+  removeDuplicateArrays(arrayOfArrays){
+    // join the inner arrays into a single string so our indexOf is able to find duplicates
+    const joinedArray = arrayOfArrays.map((elem) => { return elem.join(',') });
+
+    let filteredArray = joinedArray.filter((element, index, self) => {
       return index === self.indexOf(element);
     });
-    console.log('this.matchedcells:',this.matchedCells);
+
+    // split our inner strings back out into arrays
+    return filteredArray.map((elem) => {
+      let stringArray =  elem.split(',');
+      return [parseInt(stringArray[0]), parseInt(stringArray[1])];
+    });
   }
 
   // generate a random number between 0 and the max, and optionally exclude two numbers
   generateRandomColorNumber(max, excluded1, excluded2){
+    // swap the order so it's always smaller first
+    if (excluded1 > excluded2) {
+      const temp = excluded1;
+      excluded1 = excluded2;
+      excluded2 = temp;
+    }
+    // if we have duplicates, set the second to null;
+    if (excluded1 === excluded2) excluded2 = null;
     if (excluded1 !== null) max--;
     if (excluded2 !== null) max--;
     let n = Math.floor(Math.random() * (max));
