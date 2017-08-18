@@ -19,6 +19,7 @@ class GameBoard extends Component {
   }
 
   checkForMatches(originRow, originCell) {
+    debugger;
     const { gameArray } = this.props;
 
     const originColor = gameArray[originRow][originCell].color;
@@ -41,7 +42,7 @@ class GameBoard extends Component {
         break;
       }
     }
-    for (let r = originRow; r <= gameArray.length; r++) {
+    for (let r = originRow; r <= gameArray.length - 1; r++) {
       if (r === originRow) continue;
       if (gameArray[r][originCell].color === originColor) {
         possibleVerticalMatchCells.push([r,originCell]);
@@ -65,7 +66,7 @@ class GameBoard extends Component {
         break;
       }
     }
-    for (let c = originCell; c <= gameArray[originRow].length; c++) {
+    for (let c = originCell; c <= gameArray[originRow].length - 1; c++) {
       if (c === originCell) continue;
       if (gameArray[originRow][c].color === originColor) {
         possibleHorizontalMatchCells.push([originRow,c]);
@@ -91,10 +92,11 @@ class GameBoard extends Component {
     console.log('this.matchedcells:',this.matchedCells);
   }
 
-  generateRandomColorNumber(range, excluded1, excluded2){
-    if (excluded1 !== null) range--;
-    if (excluded2 !== null) range--;
-    let n = Math.floor(Math.random() * (range));
+  // generate a random number between 0 and the max, and optionally exclude two numbers
+  generateRandomColorNumber(max, excluded1, excluded2){
+    if (excluded1 !== null) max--;
+    if (excluded2 !== null) max--;
+    let n = Math.floor(Math.random() * (max));
     if (excluded1 !== null && n >= excluded1) n++;
     if (excluded2 !== null && n >= excluded2) n++;
     return n;
@@ -140,7 +142,6 @@ class GameBoard extends Component {
   startGameHandler() {
     this.props.activateGame();
     this.props.createGameBoard(this.generateGameArray(8, 8, 7));
-
   }
 
   handleClick(r,c,cNum){

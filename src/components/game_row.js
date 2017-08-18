@@ -4,8 +4,11 @@ import React, { Component } from 'react';
 
 //function receives props telling it to make X objects per array
 export default function GameRow(props) {
+  console.log(props);
+
 
     const cells = props.row.map((cell, index) => {
+      let ifClicked = cell.clicked ? ' clicked' : '';
       function handleClick(e){
         if (props.clickable===2) {
           return e.preventDefault();
@@ -19,7 +22,7 @@ export default function GameRow(props) {
         }
       }
       return (
-          <div key={index} className='game-row-cell' onClick={handleClick}>
+          <div key={index} className={'game-row-cell' + ifClicked} onClick={handleClick}>
             <div className={"gem color-" + cell.color} />
           </div>
       )
