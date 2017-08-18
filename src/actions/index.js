@@ -4,6 +4,7 @@ import {
     GET_TILE_ACTION,
     GET_FIRST_TILE,
     GET_SECOND_TILE,
+    NO_MATCH_FOUND,
 } from './types';
 
 
@@ -51,3 +52,9 @@ export function secondTileAction(obj){
     }
 }
 
+export function noMatchesFound(obj){
+    return {
+        type: NO_MATCH_FOUND,
+        payload: {click: 0, first:{}, second: {}, gameBoard: obj.newGameArr }
+    }
+}

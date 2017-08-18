@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { activateGame, createGameBoard, tileClickAction, firstTIleAction, secondTileAction } from '../actions/index';
+import { activateGame, createGameBoard, tileClickAction, firstTIleAction, secondTileAction, noMatchesFound } from '../actions/index';
 import GameRow from '../components/game_row';
 
 // console.log shortcut
@@ -163,11 +163,19 @@ class GameBoard extends Component {
       //if the row is not within 0 or 1, second click is now first click
       if (withinFirstRow - r !== 0 && Math.abs(withinFirstRow - r) !== 1 ) {
         this.colorOne = cNum;
-        return this.props.firstTIleAction([second,{incr:0}]);
+        let oldObjClicked = Object.assign({}, mutateArr[withinFirstRow][withinFirstCol],{clicked: false});
+        let newObjClicked  = Object.assign({}, mutateArr[r][c], {clicked: true});
+        mutateArr[withinFirstRow][withinFirstCol] = oldObjClicked;
+        mutateArr[r][c] = newObjClicked;
+        return this.props.firstTIleAction([second,{incr:0}, mutateArr]);
         //if the cols are not within 0 or 1, then it's too far of a click to be second click
       } else if (withinFirstCol - c !== 0 && Math.abs(withinFirstCol - c) !== 1){
         this.colorOne = cNum;
-        return this.props.firstTIleAction([second,{incr:0}]);
+        let oldObjClicked = Object.assign({}, mutateArr[withinFirstRow][withinFirstCol],{clicked: false});
+        let newObjClicked  = Object.assign({}, mutateArr[r][c], {clicked: true});
+        mutateArr[withinFirstRow][withinFirstCol] = oldObjClicked;
+        mutateArr[r][c] = newObjClicked;
+        return this.props.firstTIleAction([second,{incr:0}, mutateArr]);
       }
 
       //copy array you want to mutate indirectly
@@ -183,26 +191,18 @@ class GameBoard extends Component {
       secondArr[c] = objSwapTwo;
       console.log('mut,',mutateArr);
       const moveCompleted = { second: second, newGameArr: mutateArr };
+
       this.props.secondTileAction(moveCompleted);
 
       this.checkForMatches(withinFirstRow,withinFirstCol);
       this.checkForMatches(r,c);
-      this.swapColorsBack();
+      //this.swapColorsBack();
+      console.log('sec',this.props.second);
     }
   }
 
   swapColorsBack(){
-    console.log('matched cells',this.matchedCells);
-    const gameArr = this.props.gameArray.slice();
-    //there are no matches so we swap things back
-    let firstClickInd = this.props.first;
-    let fRow = firstClickInd.row;
-    let fCol = firstClickInd.col;
-
-    let secClickInd = this.props.second;
-    let sRow = secClickInd.row;
-    let sCol = secClickInd.col;
-
+      
     //send back an array to make as new state
 
   }
@@ -248,4 +248,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { activateGame, createGameBoard, tileClickAction, firstTIleAction, secondTileAction })(GameBoard);
+export default connect(mapStateToProps, { activateGame, createGameBoard, tileClickAction, firstTIleAction, secondTileAction, noMatchesFound })(GameBoard);
