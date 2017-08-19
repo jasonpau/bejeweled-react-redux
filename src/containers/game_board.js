@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { activateGame, createGameBoard, tileClickAction, firstTIleAction, secondTileAction, noMatchesFound } from '../actions/index';
+import { activateGame, createGameBoard, firstTIleAction, secondTileAction, noMatchesFound, resetGameBoard } from '../actions/index';
 import GameRow from '../components/game_row';
 
 // console.log shortcut
@@ -165,6 +165,10 @@ class GameBoard extends Component {
     this.props.activateGame();
     this.props.createGameBoard(this.generateGameArray(8, 8, 7));
   }
+  restartGameHandler() {
+    this.matchedCells = [];
+    this.props.resetGameBoard(this.generateGameArray(8, 8, 7));
+  }
 
   handleClick(r,c,cNum){
     console.log(r,c,cNum);
@@ -226,7 +230,6 @@ class GameBoard extends Component {
 
   swapColorsBack(colorTwo, colorOne){
     let mutateArr = this.props.gameArray;
-    // let x = Object.assign([], mutateArr);
     //if there are no matches on the board
     if (this.matchedCells.length === 0) {
       const swapColorBack = mutateArr.map((cellRow) =>{
@@ -240,7 +243,6 @@ class GameBoard extends Component {
         });
       });
       this.props.noMatchesFound(swapColorBack);
-      console.log('the cells',swapColorBack);
     }else{
       //there are matches somewhere on the board
       //they should be deleted from the array
@@ -276,8 +278,15 @@ class GameBoard extends Component {
 
 
     return (
-      <div className="game-board">
-        { (this.props.active) ? rows : button }
+      <div>
+        <div className="game-reset">
+            <button onClick = {this.restartGameHandler.bind(this)}>
+                Reset Game
+            </button>
+        </div>
+        <div className="game-board">
+          { (this.props.active) ? rows : button }
+        </div>
       </div>
     );
   }
@@ -293,4 +302,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { activateGame, createGameBoard, tileClickAction, firstTIleAction, secondTileAction, noMatchesFound })(GameBoard);
+export default connect(mapStateToProps, { activateGame, createGameBoard, firstTIleAction, secondTileAction, noMatchesFound, resetGameBoard })(GameBoard);
