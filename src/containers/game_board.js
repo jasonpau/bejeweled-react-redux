@@ -204,12 +204,11 @@ class GameBoard extends Component {
         return this.props.firstTIleAction([second,{incr:0}, mutateArr]);
       }
 
-      //copy array you want to mutate indirectly
       let firstSwap = mutateArr[withinFirstRow][withinFirstCol]; //the object we need to mutate as well
       let secondSwap = mutateArr[r][c]; //the second object we need to mutate
 
-      let objSwapOne = Object.assign({}, firstSwap,{color: cNum}); //this may be needless at this point, but here we set the new value to obj
-      let objSwapTwo = Object.assign({}, secondSwap,{color: this.colorOne, clicked: true});//this enables color switch
+      let objSwapOne = Object.assign({}, firstSwap,{color: cNum});
+      let objSwapTwo = Object.assign({}, secondSwap,{color: this.colorOne, clicked: true});
 
       let firstArr = mutateArr[withinFirstRow]; //set the obj in the array row to the new value
       firstArr[withinFirstCol] = objSwapOne;
@@ -219,9 +218,9 @@ class GameBoard extends Component {
       const moveCompleted = { second: second, newGameArr: mutateArr };
 
       this.props.secondTileAction(moveCompleted);
-
       this.checkForMatches(withinFirstRow,withinFirstCol);
       this.checkForMatches(r,c);
+
       setTimeout( () =>{
         this.swapColorsBack(cNum,this.colorOne);
       }, 2000);
@@ -279,10 +278,10 @@ class GameBoard extends Component {
 
     return (
       <div>
-        <div className="game-reset">
-            <button onClick = {this.restartGameHandler.bind(this)}>
-                Reset Game
-            </button>
+        <div className="game-panel">
+          <button onClick = {this.restartGameHandler.bind(this)}>
+            Reset Game
+          </button>
         </div>
         <div className="game-board">
           { (this.props.active) ? rows : button }
