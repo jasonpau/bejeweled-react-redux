@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { activateGame, createGameBoard, tileClickAction, firstTIleAction, secondTileAction } from '../actions/index';
+import { activateGame, createGameBoard, firstTIleAction, secondTileAction, noMatchesFound, resetGameBoard } from '../actions/index';
 import GameRow from '../components/game_row';
 
 // console.log shortcut
@@ -165,6 +165,10 @@ class GameBoard extends Component {
     this.props.activateGame();
     this.props.createGameBoard(this.generateGameArray(8, 8, 7));
   }
+  restartGameHandler() {
+    this.matchedCells = [];
+    this.props.resetGameBoard(this.generateGameArray(8, 8, 7));
+  }
 
   handleClick(r,c,cNum){
     console.log(r,c,cNum);
@@ -185,19 +189,26 @@ class GameBoard extends Component {
       //if the row is not within 0 or 1, second click is now first click
       if (withinFirstRow - r !== 0 && Math.abs(withinFirstRow - r) !== 1 ) {
         this.colorOne = cNum;
-        return this.props.firstTIleAction([second,{incr:0}]);
+        let oldObjClicked = Object.assign({}, mutateArr[withinFirstRow][withinFirstCol],{clicked: false});
+        let newObjClicked  = Object.assign({}, mutateArr[r][c], {clicked: true});
+        mutateArr[withinFirstRow][withinFirstCol] = oldObjClicked;
+        mutateArr[r][c] = newObjClicked;
+        return this.props.firstTIleAction([second,{incr:0}, mutateArr]);
         //if the cols are not within 0 or 1, then it's too far of a click to be second click
       } else if (withinFirstCol - c !== 0 && Math.abs(withinFirstCol - c) !== 1){
         this.colorOne = cNum;
-        return this.props.firstTIleAction([second,{incr:0}]);
+        let oldObjClicked = Object.assign({}, mutateArr[withinFirstRow][withinFirstCol],{clicked: false});
+        let newObjClicked  = Object.assign({}, mutateArr[r][c], {clicked: true});
+        mutateArr[withinFirstRow][withinFirstCol] = oldObjClicked;
+        mutateArr[r][c] = newObjClicked;
+        return this.props.firstTIleAction([second,{incr:0}, mutateArr]);
       }
 
-      //copy array you want to mutate indirectly
       let firstSwap = mutateArr[withinFirstRow][withinFirstCol]; //the object we need to mutate as well
       let secondSwap = mutateArr[r][c]; //the second object we need to mutate
 
-      let objSwapOne = Object.assign({}, firstSwap,{color: cNum}); //this may be needless at this point, but here we set the new value to obj
-      let objSwapTwo = Object.assign({}, secondSwap,{color: this.colorOne, clicked: true});//this enables color switch
+      let objSwapOne = Object.assign({}, firstSwap,{color: cNum});
+      let objSwapTwo = Object.assign({}, secondSwap,{color: this.colorOne, clicked: true});
 
       let firstArr = mutateArr[withinFirstRow]; //set the obj in the array row to the new value
       firstArr[withinFirstCol] = objSwapOne;
@@ -205,32 +216,45 @@ class GameBoard extends Component {
       secondArr[c] = objSwapTwo;
       console.log('mut,',mutateArr);
       const moveCompleted = { second: second, newGameArr: mutateArr };
-      this.props.secondTileAction(moveCompleted);
 
+      this.props.secondTileAction(moveCompleted);
       this.checkForMatches(withinFirstRow,withinFirstCol);
       this.checkForMatches(r,c);
-      this.swapColorsBack();
+
+      setTimeout( () =>{
+        this.swapColorsBack(cNum,this.colorOne);
+      }, 2000);
     }
   }
 
-  swapColorsBack(){
-    console.log('matched cells',this.matchedCells);
-    const gameArr = this.props.gameArray.slice();
-    //there are no matches so we swap things back
-    let firstClickInd = this.props.first;
-    let fRow = firstClickInd.row;
-    let fCol = firstClickInd.col;
-
-    let secClickInd = this.props.second;
-    let sRow = secClickInd.row;
-    let sCol = secClickInd.col;
-
-    //send back an array to make as new state
+  swapColorsBack(colorTwo, colorOne){
+    let mutateArr = this.props.gameArray;
+    //if there are no matches on the board
+    if (this.matchedCells.length === 0) {
+      const swapColorBack = mutateArr.map((cellRow) =>{
+        return cellRow.map((cells) => {
+          if (cells.clicked) {
+            let cellObj = Object.assign({}, cells, {clicked: false});
+            cellObj.color === colorTwo ? cellObj.color = colorOne : cellObj.color = colorTwo;
+            cells = cellObj;
+          }
+          return cells;
+        });
+      });
+      this.props.noMatchesFound(swapColorBack);
+    }else{
+      //there are matches somewhere on the board
+      //they should be deleted from the array
+      //set state so they get deleted, board renders as less
+      //and then a second later, new ones should come in and
+      //populate the board, probably
+      //and probably need to check wins again ?
+    }
 
   }
 
   render() {
-    cl('inside render game array', this.props.gameArray);
+    cl('inside render game array', this.props);
 
     let rows = [];
 
@@ -253,8 +277,15 @@ class GameBoard extends Component {
 
 
     return (
-      <div className="game-board">
-        { (this.props.active) ? rows : button }
+      <div>
+        <div className="game-panel">
+          <button onClick = {this.restartGameHandler.bind(this)}>
+            Reset Game
+          </button>
+        </div>
+        <div className="game-board">
+          { (this.props.active) ? rows : button }
+        </div>
       </div>
     );
   }
@@ -270,4 +301,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { activateGame, createGameBoard, tileClickAction, firstTIleAction, secondTileAction })(GameBoard);
+export default connect(mapStateToProps, { activateGame, createGameBoard, firstTIleAction, secondTileAction, noMatchesFound, resetGameBoard })(GameBoard);
