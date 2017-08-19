@@ -218,19 +218,42 @@ class GameBoard extends Component {
 
       this.checkForMatches(withinFirstRow,withinFirstCol);
       this.checkForMatches(r,c);
-      //this.swapColorsBack();
-      console.log('sec',this.props.second);
+      setTimeout( () =>{
+        this.swapColorsBack(cNum,this.colorOne);
+      }, 2000);
     }
   }
 
-  swapColorsBack(){
-      
-    //send back an array to make as new state
+  swapColorsBack(colorTwo, colorOne){
+    let mutateArr = this.props.gameArray;
+    // let x = Object.assign([], mutateArr);
+    //if there are no matches on the board
+    if (this.matchedCells.length === 0) {
+      const swapColorBack = mutateArr.map((cellRow) =>{
+        return cellRow.map((cells) => {
+          if (cells.clicked) {
+            let cellObj = Object.assign({}, cells, {clicked: false});
+            cellObj.color === colorTwo ? cellObj.color = colorOne : cellObj.color = colorTwo;
+            cells = cellObj;
+          }
+          return cells;
+        });
+      });
+      this.props.noMatchesFound(swapColorBack);
+      console.log('the cells',swapColorBack);
+    }else{
+      //there are matches somewhere on the board
+      //they should be deleted from the array
+      //set state so they get deleted, board renders as less
+      //and then a second later, new ones should come in and
+      //populate the board, probably
+      //and probably need to check wins again ?
+    }
 
   }
 
   render() {
-    cl('inside render game array', this.props.gameArray);
+    cl('inside render game array', this.props);
 
     let rows = [];
 

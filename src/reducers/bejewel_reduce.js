@@ -16,6 +16,7 @@ const default_state={
 export default function(state = default_state,action){
     switch(action.type){
         case GET_ALL_BEJEWELED:
+            console.log('get all ',action);
             return {...state, gameBoard: action.payload.gameData};
         case GET_TILE_ACTION:
             console.log('action pay');

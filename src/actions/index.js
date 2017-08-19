@@ -52,9 +52,15 @@ export function secondTileAction(obj){
     }
 }
 
-export function noMatchesFound(obj){
+export function noMatchesFound(arr){
+    const reset = {
+        click: 0,
+        first:{},
+        second:{},
+        newGameArr: arr,
+    };
     return {
         type: NO_MATCH_FOUND,
-        payload: {click: 0, first:{}, second: {}, gameBoard: obj.newGameArr }
+        payload: {click: reset.click, first: reset.first, second: reset.second, gameBoard: reset.newGameArr }
     }
 }
